@@ -45,8 +45,7 @@ p3 + theme_bw()
 
 # it's not necessary to show the trend when there is none
 p4 <- bfmPlot(list(mona1, mona2, mona3),
-plotlabs = c("order = 3", "order = 2", "order = 1"),
-displayTrend = FALSE)
+plotlabs = c("order = 3", "order = 2", "order = 1"), displayTrend = FALSE)
 p4 + theme_bw()
 }
 

@@ -27,23 +27,46 @@
 #' 
 #' ## the advantage of ggplot is that is is object based
 #' ## additional layers can simply be added
-#' # change to black/white
+#' # change to black/white background
 #' p2 <- p + theme_bw()
 #' p2
 #' 
 #' ## combine several bfastmonitor objects into one facet plot
 #' mona2 <- bfastmonitor(NDVIa, start = c(2010, 13), formula = response~harmon, order=2)
 #' mona3 <- bfastmonitor(NDVIa, start = c(2010, 13), formula = response~harmon, order=1)
-#' p3 <- bfmPlot(list(mona1, mona2, mona3), plotlabs = c("order = 3", "order = 2", "order = 1"))
-#' p3 + theme_bw()
+#' p3 <- bfmPlot(list(mona1, mona2, mona3), plotlabs = c("order = 3", "order = 2", "order = 1")) + theme_bw()
+#' p3
 #' 
 #' # it's not necessary to show the trend when there is none
 #' p4 <- bfmPlot(list(mona1, mona2, mona3), 
-#' plotlabs = c("order = 3", "order = 2", "order = 1"), 
-#' displayTrend = FALSE)
-#' p4 + theme_bw()
+#' plotlabs = c("order = 3", "order = 2", "order = 1"), displayTrend = FALSE) + theme_bw()
+#' p4
+#' 
+#' # compare land cover time series
+#' data(tura_ts1)
+#' data(tura_ts2)
+#' data(tura_ts3)
+#' 
+#' x <- list(tura_ts1, tura_ts2, tura_ts3)
+#' y <- lapply(x, FUN=function(z) bfastts(z, dates = time2date(time(z)), type = "irregular"))
+#' bfm <- lapply(y, FUN=function(z) bfastmonitor(z, start = c(2008, 1), formula = response~harmon, order = 1, history = "all"))
+#' p5 <- bfmPlot(bfm, displayResiduals = "monperiod", plotlabs = c("cropland", "forest", "forest to cropland"), displayTrend = FALSE) + theme_bw()
+#' p5 <- p5 + labs(y = "NDVI")
+#' p5
+#' 
+#' # sequential monitoring periods for forest disturbance monitoring
+#' # convert to 'regular' bfast time series
+#' x <- bfastts(tura_ts3, dates = time2date(time(tura_ts1)), type = "irregular")
+#' years <- c(2005:2009)
+#' bfm <- lapply(years, FUN=function(z) bfastmonitor(window(x, end = c(z + 1, 1)), start = c(z, 1), history = "all", formula = response ~ harmon, order = 1))
+#' ## returns a list of bfastmonitor objects
+#' 
+#' # show all results with change magnitudes for each monitoring period
+#' # also show residuals in the monitoring period only
+#' p6 <- bfmPlot(bfm, plotlabs = years, displayTrend = FALSE, displayMagn = TRUE, displayResiduals = "monperiod") + theme_bw()
+#' p6
 
-bfmPlot <- function(bfm, plotlabs = NULL, ncols = 1, rescale = 1, ylab = "response", displayMagn = TRUE, magn_ypos = 0.3, magn_xoffset = -0.45, magn_digits = 3, displayTrend = TRUE, displayResiduals = c("none", "all", "monperiod", "history"), type = "irregular") {
+bfmPlot <- function(bfm, plotlabs = NULL, ncols = 1, rescale = 1, ylab = "response", displayMagn = FALSE, magn_ypos = 0.3, magn_xoffset = -0.45, magn_digits = 3, displayTrend = TRUE, displayResiduals = c("none", "all", "monperiod", "history"), type = "irregular") {
   
   # get predict vector from bfm
   allData <- bfmPredict(bfm, type = type, plotlabs = plotlabs)
