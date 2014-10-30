@@ -14,6 +14,9 @@ Generate a ggplot object from a (list of) bfastmonitor object(s)
 \examples{
 # adapted from help page of bfastmonitor
 
+library(bfast)
+library(ggplot2)
+
 NDVIa <- as.ts(zoo(som$NDVI.a, som$Time))
 plot(NDVIa)
 ## apply the bfast monitor function on the data
