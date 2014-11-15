@@ -8,6 +8,45 @@
 #' 
 #' @return \code{data.frame} with model parameters and predictions according to bfastmontior parameters in \code{bfm}. See details for more info.
 #' 
+#' @details The main purpose of this function is to prepare a \code{data.frame} to be entered into \code{ggplot}. Rather than simply using the \code{tspp} part of the \code{bfastmonitor} output to plot predicted and observed values, this function 'regularizes' the \code{tspp} output to produce a smooth predicted curve. See \code{\link{bfmPlot}} for a shortcut to creating ggplot objects from bfastmonitor outputs.
+#' 
+#' @author Ben DeVries and Jan Verbesselt
+#' 
+#' @examples
+#' data(tura_ts3)
+#' plot(tura_ts3)
+#' 
+#' library(bfast)
+#' # make tura_ts3 into a 'regular' time series (with NA's)
+#' tts <- bfastts(tura_ts3, dates = time2date(time(tura_ts3)), type = "irregular")
+#' # run bfastmonitor
+#' bfm <- bfastmonitor(tts, start = c(2005, 1), formula = response~harmon, order = 1, history = "all")
+#' 
+#' # default plot
+#' plot(bfm)
+#' ## predicted values (blue curve) are only shown where (irregular) observations occur on the time axis
+#' 
+#' # make a data.frame with 'regular' predictions
+#' bfmpred <- bfmPredict(bfm)
+#' head(bfmpred)
+#' 
+#' # simple ggplot
+#' library(ggplot2)
+#' p <- ggplot(data = bfmpred, aes(x = time))
+#' p <- p + geom_line(aes(y = prediction), col = "blue")
+#' p <- p + geom_point(aes(y = response), na.rm = TRUE)
+#' p <- p + theme_bw()
+#' print(p)
+#' 
+#' # label start of monitoring period with a vertical line
+#' # and breakpoint with a red dashed line
+#' p <- p + geom_vline(aes(xintercept = start))
+#' p <- p + geom_vline(aes(xintercept = breakpoint), col = "red", lty = 2)
+#' print(p)
+#' 
+#' # bfmPlot() is a shortcut to creating such plot objects
+#' ?bfmPlot
+#' 
 #' @import bfast
 #' @export
 

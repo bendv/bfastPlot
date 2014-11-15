@@ -2,8 +2,28 @@
 #' 
 #' @description Generate a ggplot object from a (list of) bfastmonitor object(s)
 #' 
+#' @param bfm Object of type \code{bfastmonitor} or a \code{list} of such objects
+#' @param plotlabs Character. Optional: vector of facet plot lables. These should correspond to \code{bfm}
+#' @param ncols Numeric. Number of columns in plot
+#' @param rescale Numeric. Factor by which to rescale data
+#' @param ylab Character. y-axis label
+#' @param displayMagn Logical. Display magnitude on plot? See \code{\link{bfastmonitor}} for more information
+#' @param magn_ypos Numeric. Vertical position of magnitude label on plot (relative to y-range)
+#' @param magn_xoffset Numeric. Horizontal offset of magnitude label relative to the start of the monitoring period (vertical black line)
+#' @param magn_digits Numeric. Number of digits to round magnitude
+#' @param displayTend Logical. Display trend component of history model as dotted blue line?
+#' @param displayResiduals Character. Section of the plot where residuals should be highlighted. Defaults to "none" - no residuals highlighted.
+#' @param type Character. Type of time series. Can be either "irregular" (Landsat-type) or "16-day" (MODIS-type). See \code{\link{bfastts}} for more information.
+#' 
+#' @return ggplot object (see \code{\link{ggplot}}).
+#' 
+#' @import bfast
 #' @import ggplot2
 #' @export
+#' 
+#' @author Ben DeVries
+#' 
+#' @seealso \code{\link{bfmPredict}}
 #' 
 #' @examples
 #' # adapted from help page of bfastmonitor
@@ -43,9 +63,9 @@
 #' p4
 #' 
 #' # compare land cover time series
-#' data(tura_ts1)
-#' data(tura_ts2)
-#' data(tura_ts3)
+#' data(tura_ts1) # cropland pixel
+#' data(tura_ts2) # forest pixel
+#' data(tura_ts3) # converstion of forest to cropland
 #' 
 #' x <- list(tura_ts1, tura_ts2, tura_ts3)
 #' y <- lapply(x, FUN=function(z) bfastts(z, dates = time2date(time(z)), type = "irregular"))
