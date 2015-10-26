@@ -3,7 +3,7 @@ bfastPlot
 
 Plotting functions for bfast-type objects.
 
-This package can be installed directly from github (git must be installed on your system):
+This package can be installed directly from github:
 
 ```
 library(devtools)
