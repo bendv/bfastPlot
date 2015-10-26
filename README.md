@@ -8,7 +8,11 @@ This package can be installed directly from github (git must be installed on you
 ```
 library(devtools)
 install_github('bendv/bfastPlot')
+library(bfastPlot)
+```
 
-## or:
-install_github(repo = 'bfastPlot', user = 'bendv')
+Try these:
+```
+?bfmPredict
+?bfmPlot
 ```
